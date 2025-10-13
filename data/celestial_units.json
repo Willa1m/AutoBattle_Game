@@ -1,0 +1,677 @@
+{
+  "units": [
+    {
+      "id": "tianting_001",
+      "name": "天兵",
+      "faction": "天庭",
+      "classes": ["金"],
+      "cost": 1,
+      "stats": {
+        "hp": 120,
+        "atk": 45,
+        "def": 15,
+        "spd": 1.2,
+        "rng": 1,
+        "mana": 80,
+        "crit": 0.15,
+        "dodge": 0.1
+      },
+      "active_skill": {
+        "name": "天罡护体",
+        "description": "提升自身防御力30%，持续3回合",
+        "mana_cost": 80,
+        "cooldown": 2,
+        "effects": {
+          "self_buff": {
+            "def_multiplier": 1.3,
+            "duration": 3
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "天庭威严",
+          "description": "天庭单位每增加1个，攻击力+5%",
+          "effects": {
+            "faction_synergy": {
+              "faction": "天庭",
+              "atk_bonus_per_unit": 0.05
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tianting_002",
+      "name": "雷公",
+      "faction": "天庭",
+      "classes": ["火"],
+      "cost": 3,
+      "stats": {
+        "hp": 200,
+        "atk": 85,
+        "def": 25,
+        "spd": 1.0,
+        "rng": 2,
+        "mana": 120,
+        "crit": 0.2,
+        "dodge": 0.05
+      },
+      "active_skill": {
+        "name": "九天雷劫",
+        "description": "对敌方全体造成魔法伤害，并有30%几率眩晕1回合",
+        "mana_cost": 120,
+        "cooldown": 3,
+        "effects": {
+          "aoe_damage": {
+            "damage": 150,
+            "damage_type": "magical",
+            "stun_chance": 0.3,
+            "stun_duration": 1
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "雷电之力",
+          "description": "攻击时有20%几率触发连锁闪电",
+          "effects": {
+            "chain_lightning": {
+              "trigger_chance": 0.2,
+              "chain_count": 2,
+              "damage_ratio": 0.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tianting_003",
+      "name": "哪吒",
+      "faction": "天庭",
+      "classes": ["火", "光明"],
+      "cost": 5,
+      "stats": {
+        "hp": 280,
+        "atk": 120,
+        "def": 35,
+        "spd": 1.5,
+        "rng": 1,
+        "mana": 150,
+        "crit": 0.25,
+        "dodge": 0.2
+      },
+      "active_skill": {
+        "name": "三头六臂",
+        "description": "变身3回合，攻击速度翻倍，每次攻击命中3个敌人",
+        "mana_cost": 150,
+        "cooldown": 4,
+        "effects": {
+          "transform": {
+            "duration": 3,
+            "attack_speed_multiplier": 2.0,
+            "multi_target": 3
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "莲花化身",
+          "description": "死亡时有50%几率复活，回复50%生命值",
+          "effects": {
+            "resurrection": {
+              "chance": 0.5,
+              "hp_restore_ratio": 0.5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "diyu_001",
+      "name": "阴兵",
+      "faction": "地狱",
+      "classes": ["黑暗"],
+      "cost": 1,
+      "stats": {
+        "hp": 100,
+        "atk": 50,
+        "def": 10,
+        "spd": 1.1,
+        "rng": 1,
+        "mana": 70,
+        "crit": 0.1,
+        "dodge": 0.15
+      },
+      "active_skill": {
+        "name": "鬼魅突袭",
+        "description": "瞬移到敌人身后，造成150%攻击力伤害",
+        "mana_cost": 70,
+        "cooldown": 1,
+        "effects": {
+          "teleport_attack": {
+            "damage_multiplier": 1.5,
+            "ignore_defense": true
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "幽冥之力",
+          "description": "地狱单位每增加1个，闪避率+3%",
+          "effects": {
+            "faction_synergy": {
+              "faction": "地狱",
+              "dodge_bonus_per_unit": 0.03
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "diyu_002",
+      "name": "牛头马面",
+      "faction": "地狱",
+      "classes": ["土", "黑暗"],
+      "cost": 2,
+      "stats": {
+        "hp": 180,
+        "atk": 65,
+        "def": 30,
+        "spd": 0.8,
+        "rng": 1,
+        "mana": 100,
+        "crit": 0.1,
+        "dodge": 0.1
+      },
+      "active_skill": {
+        "name": "勾魂锁链",
+        "description": "锁定一个敌人，每回合造成真实伤害并吸取生命",
+        "mana_cost": 100,
+        "cooldown": 2,
+        "effects": {
+          "soul_chain": {
+            "duration": 4,
+            "damage_per_turn": 40,
+            "damage_type": "true",
+            "life_steal": 0.5
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "地狱守卫",
+          "description": "受到致命伤害时，有30%几率免疫并反击",
+          "effects": {
+            "death_immunity": {
+              "chance": 0.3,
+              "counter_attack": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "renjie_001",
+      "name": "剑客",
+      "faction": "人界",
+      "classes": ["金"],
+      "cost": 1,
+      "stats": {
+        "hp": 110,
+        "atk": 55,
+        "def": 12,
+        "spd": 1.3,
+        "rng": 1,
+        "mana": 75,
+        "crit": 0.2,
+        "dodge": 0.12
+      },
+      "active_skill": {
+        "name": "剑气纵横",
+        "description": "对前方一条直线的敌人造成剑气伤害",
+        "mana_cost": 75,
+        "cooldown": 2,
+        "effects": {
+          "line_attack": {
+            "damage_multiplier": 1.8,
+            "range": 3,
+            "crit_bonus": 0.2
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "人族韧性",
+          "description": "人界单位每增加1个，暴击率+2%",
+          "effects": {
+            "faction_synergy": {
+              "faction": "人界",
+              "crit_bonus_per_unit": 0.02
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "renjie_002",
+      "name": "道士",
+      "faction": "人界",
+      "classes": ["木", "光明"],
+      "cost": 2,
+      "stats": {
+        "hp": 140,
+        "atk": 40,
+        "def": 20,
+        "spd": 1.0,
+        "rng": 2,
+        "mana": 120,
+        "crit": 0.05,
+        "dodge": 0.1
+      },
+      "active_skill": {
+        "name": "回春术",
+        "description": "治疗友方全体，并移除负面状态",
+        "mana_cost": 120,
+        "cooldown": 3,
+        "effects": {
+          "group_heal": {
+            "heal_amount": 80,
+            "remove_debuffs": true,
+            "heal_over_time": {
+              "duration": 3,
+              "heal_per_turn": 20
+            }
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "道法自然",
+          "description": "战斗开始时，为友方全体提供护盾",
+          "effects": {
+            "battle_start_shield": {
+              "shield_amount": 60,
+              "duration": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "xianjie_001",
+      "name": "仙童",
+      "faction": "仙界",
+      "classes": ["木"],
+      "cost": 1,
+      "stats": {
+        "hp": 105,
+        "atk": 40,
+        "def": 18,
+        "spd": 1.1,
+        "rng": 2,
+        "mana": 90,
+        "crit": 0.1,
+        "dodge": 0.15
+      },
+      "active_skill": {
+        "name": "仙气护体",
+        "description": "为自己和相邻友军提供法力护盾",
+        "mana_cost": 90,
+        "cooldown": 2,
+        "effects": {
+          "mana_shield": {
+            "shield_amount": 100,
+            "duration": 4,
+            "affects_adjacent": true
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "仙界灵气",
+          "description": "仙界单位每增加1个，法力恢复速度+10%",
+          "effects": {
+            "faction_synergy": {
+              "faction": "仙界",
+              "mana_regen_bonus_per_unit": 0.1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "xianjie_002",
+      "name": "太上老君",
+      "faction": "仙界",
+      "classes": ["火", "木"],
+      "cost": 4,
+      "stats": {
+        "hp": 220,
+        "atk": 75,
+        "def": 40,
+        "spd": 0.9,
+        "rng": 3,
+        "mana": 160,
+        "crit": 0.15,
+        "dodge": 0.1
+      },
+      "active_skill": {
+        "name": "九转金丹",
+        "description": "炼制金丹，为友方全体永久提升属性",
+        "mana_cost": 160,
+        "cooldown": 5,
+        "effects": {
+          "permanent_buff": {
+            "hp_bonus": 50,
+            "atk_bonus": 20,
+            "def_bonus": 15,
+            "affects_all_allies": true
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "炼丹大师",
+          "description": "战斗中每过3回合，随机为一个友军提供强化药剂",
+          "effects": {
+            "periodic_buff": {
+              "interval": 3,
+              "random_target": true,
+              "buff_options": ["strength", "agility", "wisdom"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "yaojie_001",
+      "name": "狐妖",
+      "faction": "妖界",
+      "classes": ["水"],
+      "cost": 1,
+      "stats": {
+        "hp": 95,
+        "atk": 45,
+        "def": 8,
+        "spd": 1.4,
+        "rng": 2,
+        "mana": 85,
+        "crit": 0.15,
+        "dodge": 0.25
+      },
+      "active_skill": {
+        "name": "魅惑之术",
+        "description": "魅惑一个敌人，使其攻击自己的队友",
+        "mana_cost": 85,
+        "cooldown": 3,
+        "effects": {
+          "charm": {
+            "duration": 2,
+            "control_chance": 0.8
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "妖界狡诈",
+          "description": "妖界单位每增加1个，攻击速度+8%",
+          "effects": {
+            "faction_synergy": {
+              "faction": "妖界",
+              "speed_bonus_per_unit": 0.08
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "yaojie_002",
+      "name": "九尾狐",
+      "faction": "妖界",
+      "classes": ["水", "黑暗"],
+      "cost": 4,
+      "stats": {
+        "hp": 240,
+        "atk": 95,
+        "def": 25,
+        "spd": 1.6,
+        "rng": 2,
+        "mana": 140,
+        "crit": 0.3,
+        "dodge": 0.35
+      },
+      "active_skill": {
+        "name": "九尾幻境",
+        "description": "创造幻境，使敌方全体混乱并持续受到精神伤害",
+        "mana_cost": 140,
+        "cooldown": 4,
+        "effects": {
+          "illusion": {
+            "duration": 4,
+            "confusion": true,
+            "mental_damage_per_turn": 35,
+            "affects_all_enemies": true
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "千年修为",
+          "description": "每次击杀敌人，永久增加10点攻击力",
+          "effects": {
+            "kill_bonus": {
+              "atk_gain_per_kill": 10,
+              "permanent": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shenshou_001",
+      "name": "青龙",
+      "faction": "神兽",
+      "classes": ["木", "水"],
+      "cost": 5,
+      "stats": {
+        "hp": 350,
+        "atk": 110,
+        "def": 45,
+        "spd": 1.2,
+        "rng": 2,
+        "mana": 180,
+        "crit": 0.2,
+        "dodge": 0.15
+      },
+      "active_skill": {
+        "name": "青龙吐息",
+        "description": "喷射龙息，对扇形区域内敌人造成巨额伤害并降低其防御",
+        "mana_cost": 180,
+        "cooldown": 4,
+        "effects": {
+          "breath_attack": {
+            "damage_multiplier": 2.5,
+            "area": "cone",
+            "def_reduction": 0.5,
+            "def_reduction_duration": 5
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "四象之力",
+          "description": "神兽单位每增加1个，全属性+15%",
+          "effects": {
+            "faction_synergy": {
+              "faction": "神兽",
+              "all_stats_bonus_per_unit": 0.15
+            }
+          }
+        },
+        {
+          "name": "龙威",
+          "description": "战斗开始时，降低敌方全体20%攻击力",
+          "effects": {
+            "battle_start_debuff": {
+              "atk_reduction": 0.2,
+              "affects_all_enemies": true,
+              "duration": -1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shenshou_002",
+      "name": "白虎",
+      "faction": "神兽",
+      "classes": ["金", "光明"],
+      "cost": 5,
+      "stats": {
+        "hp": 320,
+        "atk": 140,
+        "def": 40,
+        "spd": 1.4,
+        "rng": 1,
+        "mana": 160,
+        "crit": 0.4,
+        "dodge": 0.2
+      },
+      "active_skill": {
+        "name": "虎啸山林",
+        "description": "发出虎啸，提升友方全体暴击率并使敌方恐惧",
+        "mana_cost": 160,
+        "cooldown": 3,
+        "effects": {
+          "roar": {
+            "ally_crit_bonus": 0.3,
+            "ally_buff_duration": 5,
+            "enemy_fear": true,
+            "enemy_debuff_duration": 3
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "王者之威",
+          "description": "每次暴击后，下次攻击必定暴击",
+          "effects": {
+            "crit_chain": {
+              "guaranteed_next_crit": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "special_001",
+      "name": "孙悟空",
+      "faction": "妖界",
+      "classes": ["金", "火", "光明"],
+      "cost": 5,
+      "stats": {
+        "hp": 300,
+        "atk": 130,
+        "def": 35,
+        "spd": 1.8,
+        "rng": 1,
+        "mana": 200,
+        "crit": 0.25,
+        "dodge": 0.3
+      },
+      "active_skill": {
+        "name": "七十二变",
+        "description": "随机获得一个神兽的技能，持续整场战斗",
+        "mana_cost": 200,
+        "cooldown": 6,
+        "effects": {
+          "transform_skill": {
+            "random_divine_skill": true,
+            "duration": -1,
+            "skill_pool": ["dragon_breath", "tiger_roar", "phoenix_rebirth", "turtle_shell"]
+          }
+        }
+      },
+      "passive_skills": [
+        {
+          "name": "斗战胜佛",
+          "description": "生命值低于30%时，攻击力和攻击速度翻倍",
+          "effects": {
+            "low_hp_boost": {
+              "hp_threshold": 0.3,
+              "atk_multiplier": 2.0,
+              "speed_multiplier": 2.0
+            }
+          }
+        },
+        {
+          "name": "火眼金睛",
+          "description": "免疫所有控制效果和幻术",
+          "effects": {
+            "control_immunity": true,
+            "illusion_immunity": true
+          }
+        }
+      ]
+    }
+  ],
+  "synergies": {
+    "factions": {
+      "天庭": {
+        "3": "天庭单位攻击力+25%",
+        "5": "天庭单位攻击力+50%，并获得神圣护盾"
+      },
+      "地狱": {
+        "3": "地狱单位闪避率+15%",
+        "5": "地狱单位闪避率+30%，攻击时有几率造成恐惧"
+      },
+      "人界": {
+        "3": "人界单位暴击率+10%",
+        "5": "人界单位暴击率+25%，暴击时回复法力"
+      },
+      "仙界": {
+        "3": "仙界单位法力恢复速度+50%",
+        "5": "仙界单位法力恢复速度+100%，技能冷却-1"
+      },
+      "妖界": {
+        "3": "妖界单位攻击速度+25%",
+        "5": "妖界单位攻击速度+50%，攻击时有几率魅惑敌人"
+      },
+      "神兽": {
+        "2": "神兽单位全属性+30%",
+        "4": "神兽单位全属性+60%，获得真龙血脉"
+      }
+    },
+    "classes": {
+      "金": {
+        "2": "金系单位攻击力+20%",
+        "5": "金系单位攻击力+50%，攻击无视护甲"
+      },
+      "木": {
+        "2": "木系单位生命值+25%",
+        "5": "木系单位生命值+60%，每回合回复生命"
+      },
+      "水": {
+        "2": "水系单位法力值+30%",
+        "5": "水系单位法力值+70%，技能伤害+30%"
+      },
+      "火": {
+        "2": "火系单位暴击率+15%",
+        "5": "火系单位暴击率+35%，暴击时燃烧敌人"
+      },
+      "土": {
+        "2": "土系单位防御力+30%",
+        "5": "土系单位防御力+70%，受到攻击时反弹伤害"
+      },
+      "黑暗": {
+        "2": "黑暗系单位吸血+20%",
+        "5": "黑暗系单位吸血+50%，击杀敌人时回复法力"
+      },
+      "光明": {
+        "2": "光明系单位对黑暗系伤害+50%",
+        "5": "光明系单位对黑暗系伤害+100%，免疫负面状态"
+      }
+    }
+  }
+}
