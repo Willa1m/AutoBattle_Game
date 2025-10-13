@@ -340,3 +340,63 @@ class Unit:
         )
         
         return unit
+
+    @staticmethod
+    def from_dict(data: Dict) -> "Unit":
+        """从字典数据创建Unit对象（兼容性方法）"""
+        return Unit.from_json(data)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """转换为字典格式"""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "faction": self.faction,
+            "classes": self.classes,
+            "cost": self.cost,
+            "star": self.star,
+            "stats": {
+                "hp": self.base_stats.hp,
+                "atk": self.base_stats.atk,
+                "def": self.base_stats.def_,
+                "spd": self.base_stats.spd,
+                "rng": self.base_stats.rng,
+                "mana": self.base_stats.mana,
+                "crit": self.base_stats.crit,
+                "dodge": self.base_stats.dodge
+            },
+            "active_skill": {
+                "name": self.active_skill.name,
+                "description": self.active_skill.description,
+                "mana_cost": self.active_skill.mana_cost,
+                "cooldown": self.active_skill.cooldown,
+                "effects": self.active_skill.effects
+            } if self.active_skill else None,
+            "passive_skills": [
+                {
+                    "name": skill.name,
+                    "description": skill.description,
+                    "effects": skill.effects
+                } for skill in self.passive_skills
+            ]
+        }
+
+
+def load_units_from_json(filename: str = "data/celestial_units.json") -> List[Dict]:
+    """从JSON文件加载单位数据"""
+    import os
+    
+    # 获取项目根目录
+    current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(current_dir, filename)
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return data.get("units", [])
+    except FileNotFoundError:
+        print(f"警告：单位数据文件 {file_path} 不存在")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"警告：解析单位数据文件失败: {e}")
+        return []
