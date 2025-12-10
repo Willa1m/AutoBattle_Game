@@ -62,7 +62,7 @@ class TestGameManager(unittest.TestCase):
         self.assertEqual(player1.name, "张三")
         self.assertEqual(player1.health, 100)
         self.assertEqual(player1.gold, 20)  # 初始10 + 游戏开始奖励10 = 20
-        self.assertEqual(player1.level, 1)
+        self.assertEqual(player1.level, 3) # Updated to 3 based on Requirement 4b
         
         print("✓ 玩家创建和管理测试通过")
     

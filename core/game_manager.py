@@ -12,6 +12,8 @@ from dataclasses import dataclass, asdict
 from .unit import Unit
 from .battle import BattleSystem
 from .synergy import SynergyManager
+from .talent import TalentManager, Talent
+from .equipment_manager import EquipmentManager
 
 
 class GamePhase(Enum):
@@ -20,6 +22,7 @@ class GamePhase(Enum):
     PREPARATION = "preparation"  # 准备阶段（购买、放置单位）
     BATTLE = "battle"           # 战斗阶段
     FINISHED = "finished"       # 游戏结束
+    MONSTER_ROUND = "monster_round" # 野怪回合 (PvE)
 
 
 class PlayerStatus(Enum):
@@ -56,6 +59,9 @@ class Player:
     status: PlayerStatus = PlayerStatus.ACTIVE
     stats: PlayerStats = None
     last_battle_result: Optional[str] = None
+    talents: List[Talent] = None
+    pending_talent_choices: List[Talent] = None # 待选择的天赋
+    pending_item_choices: List[List[Any]] = None # 待选择的装备
     
     def __post_init__(self):
         if self.units is None:
@@ -66,10 +72,17 @@ class Player:
             self.bench_units = []
         if self.stats is None:
             self.stats = PlayerStats()
+        if self.talents is None:
+            self.talents = []
+        if self.pending_talent_choices is None:
+            self.pending_talent_choices = []
+        if self.pending_item_choices is None:
+            self.pending_item_choices = []
     
-    def add_experience(self, exp: int):
-        """增加经验值，处理升级"""
+    def add_experience(self, exp: int) -> bool:
+        """增加经验值，处理升级，返回是否升级"""
         self.experience += exp
+        leveled_up = False
         
         # 升级所需经验值（简化版本）
         exp_needed = self.level * 2
@@ -77,8 +90,11 @@ class Player:
         while self.experience >= exp_needed and self.level < 9:
             self.experience -= exp_needed
             self.level += 1
+            leveled_up = True
             exp_needed = self.level * 2
             print(f"玩家 {self.name} 升级到 {self.level} 级！")
+
+        return leveled_up
     
     def take_damage(self, damage: int):
         """受到伤害"""
@@ -153,6 +169,8 @@ class GameManager:
         self.phase = GamePhase.WAITING
         self.battle_system = BattleSystem()
         self.synergy_manager = SynergyManager()
+        self.talent_manager = TalentManager()
+        self.equipment_manager = EquipmentManager()
         
         # 游戏配置
         self.preparation_time = 30  # 准备阶段时间（秒）
@@ -210,6 +228,7 @@ class GameManager:
         # 给每个玩家初始资源
         for player in self.players.values():
             player.add_gold(10)  # 初始金币
+            player.level = 3 # Start at level 3 (Requirement 4b)
             player.add_experience(0)  # 初始经验
         
         print(f"游戏开始！当前 {len(self.players)} 个玩家")
@@ -228,17 +247,58 @@ class GameManager:
         elapsed_time = current_time - self.phase_start_time
         
         if self.phase == GamePhase.PREPARATION:
+            # Check for level ups and talents
+            for player in self.players.values():
+                if player.status == PlayerStatus.ACTIVE:
+                    # Simulation: Auto-pick first talent if pending
+                    if player.pending_talent_choices:
+                        chosen = player.pending_talent_choices[0]
+                        player.talents.append(chosen)
+                        player.pending_talent_choices = []
+                        print(f"玩家 {player.name} 选择了天赋: {chosen.name}")
+
             # 检查准备阶段是否结束
             if elapsed_time >= self.phase_duration:
-                self._start_battle_phase()
+                if self.current_round % 5 == 0:
+                     self._start_monster_phase()
+                else:
+                     self._start_battle_phase()
         
         elif self.phase == GamePhase.BATTLE:
             # 战斗阶段由战斗系统管理，这里检查是否结束
             if self.battle_system.phase.value == "finished":
                 self._end_battle_phase()
+
+        elif self.phase == GamePhase.MONSTER_ROUND:
+             # PvE round logic (Simplified: Instant finish for simulation)
+             self._end_monster_phase()
         
         # 检查游戏是否结束
         self._check_game_end()
+
+    def _start_monster_phase(self):
+        """开始野怪回合"""
+        self.phase = GamePhase.MONSTER_ROUND
+        self.phase_start_time = time.time()
+        print(f"第 {self.current_round} 回合 - 野怪回合")
+
+        # Grant rewards based on Requirement 4a
+        rewards = self.equipment_manager.get_monster_round_rewards(self.current_round)
+        for player in self.players.values():
+            if player.status == PlayerStatus.ACTIVE:
+                player.pending_item_choices = rewards
+                # Simulation: Auto-pick first item from each choice set
+                for choices in rewards:
+                    if choices:
+                         item = choices[0]
+                         # Find a unit to equip or store?
+                         # For now just store in player stats or log it
+                         print(f"玩家 {player.name} 获得装备: {item.name} ({item.star}星)")
+
+    def _end_monster_phase(self):
+        """结束野怪回合"""
+        print(f"第 {self.current_round} 回合野怪挑战结束")
+        self._end_battle_phase() # Reuse logic for round progression
     
     def _start_battle_phase(self):
         """开始战斗阶段"""
@@ -313,35 +373,41 @@ class GameManager:
             player1.last_battle_result = "draw"
             player2.last_battle_result = "draw"
             print(f"战斗平局：{player1.name} vs {player2.name}")
-            return
+            winner = None
+            loser = None
+            damage = 1 # 平局双方受少量伤害，已在上方处理，但为了记录需要保留值
         
-        # 计算伤害（基于失败方剩余单位数量）
-        remaining_units = len([u for u in loser.board_units if u.current_hp > 0])
-        base_damage = max(1, loser.level)
-        damage = base_damage + max(0, len(loser.board_units) - remaining_units)
-        
-        # 应用结果
-        loser.take_damage(damage)
-        winner.stats.wins += 1
-        winner.stats.damage_dealt += damage
-        loser.stats.losses += 1
-        
-        winner.last_battle_result = "win"
-        loser.last_battle_result = "loss"
-        
-        # 奖励
-        winner.add_gold(1)
-        winner.add_experience(2)
-        loser.add_experience(1)
-        
-        print(f"战斗结果：{winner.name} 获胜，{loser.name} 受到 {damage} 点伤害")
+        if winner and loser:
+            # 计算伤害（基于失败方剩余单位数量）
+            remaining_units = len([u for u in loser.board_units if u.current_hp > 0])
+            base_damage = max(1, loser.level)
+            damage = base_damage + max(0, len(loser.board_units) - remaining_units)
+
+            # 应用结果
+            loser.take_damage(damage)
+            winner.stats.wins += 1
+            winner.stats.damage_dealt += damage
+            loser.stats.losses += 1
+
+            winner.last_battle_result = "win"
+            loser.last_battle_result = "loss"
+
+            # 奖励
+            winner.add_gold(1)
+            if winner.add_experience(2): # Check for level up
+                 winner.pending_talent_choices = self.talent_manager.get_talent_choices(winner.level)
+
+            if loser.add_experience(1): # Check for level up
+                 loser.pending_talent_choices = self.talent_manager.get_talent_choices(loser.level)
+
+            print(f"战斗结果：{winner.name} 获胜，{loser.name} 受到 {damage} 点伤害")
         
         # 记录战斗结果
         battle_record = {
             "round": self.current_round,
             "player1": player1.name,
             "player2": player2.name,
-            "winner": winner.name,
+            "winner": winner.name if winner else "draw",
             "damage": damage,
             "battle_duration": self.battle_system.current_round
         }
