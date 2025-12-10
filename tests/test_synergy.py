@@ -42,10 +42,11 @@ class TestSynergy(unittest.TestCase):
 
     def test_get_active_synergies(self):
         """Test detecting active synergies based on counts."""
-        # Need 2 Tianting for first level
+        # Need 3 Tianting for first level (Requirement 2)
         units = [
             self.create_mock_unit("天庭", ["金"]),
             self.create_mock_unit("天庭", ["木"]),
+            self.create_mock_unit("天庭", ["水"]),
         ]
 
         active = self.manager.get_active_faction_synergies(units)
@@ -53,10 +54,10 @@ class TestSynergy(unittest.TestCase):
         self.assertEqual(len(active["天庭"]), 1)
         self.assertEqual(active["天庭"][0].name, "天威")
 
-        # Need 4 Tianting for second level
+        # Need 5 Tianting for second level (Requirement 2)
         units.extend([
-            self.create_mock_unit("天庭", ["水"]),
             self.create_mock_unit("天庭", ["火"]),
+            self.create_mock_unit("天庭", ["土"]),
         ])
         active = self.manager.get_active_faction_synergies(units)
         self.assertEqual(len(active["天庭"]), 2) # Level 1 and Level 2
@@ -73,29 +74,27 @@ class TestSynergy(unittest.TestCase):
 
     def test_synergy_application(self):
         """Test applying stats to a unit."""
-        # 2 Tianting units -> +15% Def
+        # 3 Tianting units -> True Damage +20% (Requirement 2)
         u1 = self.create_mock_unit("天庭", ["金"])
         u2 = self.create_mock_unit("天庭", ["木"])
-        units = [u1, u2]
+        u3 = self.create_mock_unit("天庭", ["水"])
+        units = [u1, u2, u3]
 
         # apply_synergies_to_unit returns a dict of bonuses
         bonuses = self.manager.apply_synergies_to_unit(u1, units)
-        self.assertIn("def", bonuses)
-        self.assertAlmostEqual(bonuses["def"], 0.15)
-
-        # Verify u2 also gets it
-        bonuses2 = self.manager.apply_synergies_to_unit(u2, units)
-        self.assertAlmostEqual(bonuses2["def"], 0.15)
+        self.assertIn("true_damage_bonus", bonuses)
+        self.assertAlmostEqual(bonuses["true_damage_bonus"], 0.20)
 
         # Add class synergy: 2 Metal -> +25% Def (Actual effect in synergy.py)
-        u3 = self.create_mock_unit("佛门", ["金"])
-        units.append(u3)
+        u4 = self.create_mock_unit("佛门", ["金"])
+        units.append(u4)
 
-        # u1 is Metal, so should get Faction bonus (15% Def) + Class bonus (25% Def)
+        # u1 is Metal, so should get Faction bonus (True Dmg) + Class bonus (25% Def)
         bonuses_u1 = self.manager.apply_synergies_to_unit(u1, units)
+        self.assertIn("true_damage_bonus", bonuses_u1)
         self.assertIn("def", bonuses_u1)
-        # Total defense bonus should be 0.15 + 0.25 = 0.40
-        self.assertAlmostEqual(bonuses_u1["def"], 0.40)
+        self.assertAlmostEqual(bonuses_u1["true_damage_bonus"], 0.20)
+        self.assertAlmostEqual(bonuses_u1["def"], 0.25)
 
     def test_synergy_info(self):
         """Test getting synergy info for UI."""
@@ -105,10 +104,11 @@ class TestSynergy(unittest.TestCase):
         self.assertEqual(info["faction_counts"]["天庭"], 1)
         self.assertEqual(len(info["active_faction_synergies"]), 0)
 
-        # Add another to activate
+        # Add more to activate (Need 3 for Tianting now)
         units.append(self.create_mock_unit("天庭", ["木"], alive=True))
+        units.append(self.create_mock_unit("天庭", ["水"], alive=True))
         info = self.manager.get_synergy_info(units)
-        self.assertEqual(info["faction_counts"]["天庭"], 2)
+        self.assertEqual(info["faction_counts"]["天庭"], 3)
         self.assertIn("天庭", info["active_faction_synergies"])
 
 if __name__ == '__main__':

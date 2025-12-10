@@ -48,7 +48,7 @@ class SynergyEffect:
         
         # 应用属性加成
         for stat, bonus in self.stat_bonuses.items():
-            if stat in ["hp", "atk", "def", "spd", "rng", "mana", "crit", "dodge"]:
+            if stat in ["hp", "atk", "def", "spd", "rng", "mana", "crit", "dodge", "true_damage_bonus"]:
                 applied_bonuses[stat] = bonus
         
         return applied_bonuses
@@ -79,17 +79,13 @@ class SynergyManager:
         # 阵营协同效果
         self.faction_synergies = {
             "天庭": [
-                SynergyLevel(2, SynergyEffect(
-                    "天威", "天庭单位获得护甲加成",
-                    {"def": 0.15}, ["divine_protection"], 2
+                SynergyLevel(3, SynergyEffect(
+                    "天威", "天庭单位获得真实伤害加成 (Requirement 2)",
+                    {"true_damage_bonus": 0.20}, ["true_strike"], 3
                 )),
-                SynergyLevel(4, SynergyEffect(
-                    "天罡正气", "天庭单位获得攻击和防御加成",
-                    {"atk": 0.20, "def": 0.25}, ["divine_blessing"], 4
-                )),
-                SynergyLevel(6, SynergyEffect(
-                    "九天神威", "天庭单位获得全属性大幅加成",
-                    {"hp": 0.30, "atk": 0.35, "def": 0.40}, ["divine_supremacy"], 6
+                SynergyLevel(5, SynergyEffect(
+                    "九天神威", "天庭单位获得更强真实伤害 (Requirement 2)",
+                    {"true_damage_bonus": 0.40}, ["true_strike_greater"], 5
                 ))
             ],
             

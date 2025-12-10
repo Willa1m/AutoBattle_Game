@@ -87,10 +87,10 @@ class Unit:
 
     def get_stats(self) -> Stats:
         """
-        按星级返回当前属性，星级系数：1.0 / 1.8 / 3.24
+        按星级返回当前属性，星级系数：1.0 / 2.0 / 4.0 (Requirement 2)
         3星棋子属性大幅提升，符合自走棋平衡性
         """
-        scale = 1.0 if self.star == 1 else 1.8 if self.star == 2 else 3.24
+        scale = 1.0 if self.star == 1 else 2.0 if self.star == 2 else 4.0
         s = self.base_stats.copy()
         s.hp = int(s.hp * scale)
         s.atk = int(s.atk * scale)

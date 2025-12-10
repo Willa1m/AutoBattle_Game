@@ -85,7 +85,7 @@ class TestBattleSystem(unittest.TestCase):
         stats = Stats(hp=100, atk=50, def_=10, spd=5, rng=1, mana=0, crit=0.1, dodge=0.05)
         
         tianting_units = []
-        for i in range(3):
+        for i in range(3): # This is already 3, but let's confirm the expectation relies on >=3
             unit = Unit(f"tianting_{i}", f"天庭单位{i}", "天庭", ["金"], 1, stats)
             # unit_id不再需要，使用unit.id
             # player_id不再需要，Unit类没有这个属性
@@ -274,7 +274,7 @@ class TestBattleIntegration(unittest.TestCase):
         if test_units:
             bonuses = synergy_manager.apply_synergies_to_unit(test_units[0], test_units)
             # 如果有足够的天庭单位，应该有协同加成
-            if synergy_info["faction_counts"]["天庭"] >= 2:
+            if synergy_info["faction_counts"]["天庭"] >= 3:
                 self.assertGreater(len(bonuses), 0, "应该有天庭阵营协同加成")
 
 

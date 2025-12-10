@@ -93,15 +93,15 @@ class TestUnit(unittest.TestCase):
         # 2星属性
         self.unit.upgrade()
         stats_2 = self.unit.get_stats()
-        self.assertEqual(stats_2.hp, 180)  # 100 * 1.8
-        self.assertEqual(stats_2.atk, 90)  # 50 * 1.8
+        self.assertEqual(stats_2.hp, 200)  # 100 * 2.0 (Requirement 2)
+        self.assertEqual(stats_2.atk, 100)  # 50 * 2.0
         print(f"✓ 2星属性: HP={stats_2.hp}, ATK={stats_2.atk}")
         
         # 3星属性
         self.unit.upgrade()
         stats_3 = self.unit.get_stats()
-        self.assertEqual(stats_3.hp, 324)  # 100 * 3.24
-        self.assertEqual(stats_3.atk, 162)  # 50 * 3.24
+        self.assertEqual(stats_3.hp, 400)  # 100 * 4.0 (Requirement 2)
+        self.assertEqual(stats_3.atk, 200)  # 50 * 4.0
         print(f"✓ 3星属性: HP={stats_3.hp}, ATK={stats_3.atk}")
         
         # 无法继续升级
