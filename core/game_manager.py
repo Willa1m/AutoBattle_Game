@@ -313,35 +313,38 @@ class GameManager:
             player1.last_battle_result = "draw"
             player2.last_battle_result = "draw"
             print(f"战斗平局：{player1.name} vs {player2.name}")
-            return
+            winner = None
+            loser = None
+            damage = 1 # 平局双方受少量伤害，已在上方处理，但为了记录需要保留值
         
-        # 计算伤害（基于失败方剩余单位数量）
-        remaining_units = len([u for u in loser.board_units if u.current_hp > 0])
-        base_damage = max(1, loser.level)
-        damage = base_damage + max(0, len(loser.board_units) - remaining_units)
-        
-        # 应用结果
-        loser.take_damage(damage)
-        winner.stats.wins += 1
-        winner.stats.damage_dealt += damage
-        loser.stats.losses += 1
-        
-        winner.last_battle_result = "win"
-        loser.last_battle_result = "loss"
-        
-        # 奖励
-        winner.add_gold(1)
-        winner.add_experience(2)
-        loser.add_experience(1)
-        
-        print(f"战斗结果：{winner.name} 获胜，{loser.name} 受到 {damage} 点伤害")
+        if winner and loser:
+            # 计算伤害（基于失败方剩余单位数量）
+            remaining_units = len([u for u in loser.board_units if u.current_hp > 0])
+            base_damage = max(1, loser.level)
+            damage = base_damage + max(0, len(loser.board_units) - remaining_units)
+
+            # 应用结果
+            loser.take_damage(damage)
+            winner.stats.wins += 1
+            winner.stats.damage_dealt += damage
+            loser.stats.losses += 1
+
+            winner.last_battle_result = "win"
+            loser.last_battle_result = "loss"
+
+            # 奖励
+            winner.add_gold(1)
+            winner.add_experience(2)
+            loser.add_experience(1)
+
+            print(f"战斗结果：{winner.name} 获胜，{loser.name} 受到 {damage} 点伤害")
         
         # 记录战斗结果
         battle_record = {
             "round": self.current_round,
             "player1": player1.name,
             "player2": player2.name,
-            "winner": winner.name,
+            "winner": winner.name if winner else "draw",
             "damage": damage,
             "battle_duration": self.battle_system.current_round
         }

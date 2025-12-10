@@ -307,7 +307,7 @@ class Unit:
         
         # 解析技能
         active_skill = None
-        if "active_skill" in obj:
+        if "active_skill" in obj and obj["active_skill"] is not None:
             skill_data = obj["active_skill"]
             active_skill = Skill(
                 name=skill_data.get("name", ""),
