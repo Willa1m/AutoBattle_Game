@@ -70,6 +70,10 @@ The Chinese design document (`天界之战：中国神话自走棋项目计划�
 - Writing the battle loop as "build a queue → decide → apply → check end" made it much easier to test edge cases one step at a time.
 - Next steps: a game entry point and CLI, more units, and balance tuning driven by simulation.
 
+---
+
+*Documentation and repository cleanup were done with AI assistance (Claude Code); the project code and results are my own.*
+
 ## 中文说明
 
 这是一个以中国神话为题材的自走棋核心引擎，只用 Python 标准库编写，目前还没有可玩的界面或入口程序。
